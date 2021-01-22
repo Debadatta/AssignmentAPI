@@ -3,6 +3,7 @@ package StepDefinitions;
 
 
 import io.restassured.RestAssured.*;
+import io.restassured.http.Method;
 import io.restassured.matcher.RestAssuredMatchers.*;
 import org.hamcrest.Matchers.*;
 
@@ -82,51 +83,57 @@ public class StepDefinitions {
 	
 	@When("^I register station with details$")
 	public void i_register_station_with_details() {
+		request = RestAssured.given();
 		JSONObject requestParams = new JSONObject();		
-	
-		requestParams.put("appid", "94ee89226ce499d45a755090f02e3e7b");
+			
 		requestParams.put("external_id", "DEMO_TEST001"); 
 		requestParams.put("name", "Interview Station <Random Number>");
-		 request = RestAssured.given();
+		 
 		requestParams.put("latitude", 33.33);
 		requestParams.put("longitude", -111.43);
-		requestParams.put("altitude",  444);
-		request.header("Content-Type", "application/json");
-		request.body(requestParams.toString());
-		response = request.post(ENDPOINT_URL);
-		System.out.println("response: " + response.getStatusCode());
+		requestParams.put("altitude",  444);		
 		
 		JSONObject requestParams1 = new JSONObject();
-		requestParams1.put("appid", "94ee89226ce499d45a755090f02e3e7b");
 		requestParams1.put("external_id", "Interview1"); 
 		requestParams1.put("name", "Interview Station <Random Number>");
 		
 		requestParams1.put("latitude", 33.44);
 		requestParams1.put("longitude", -12.44);
 		requestParams1.put("altitude",  444);
+
+		
 		request.header("Content-Type", "application/json");
 		request.body(requestParams.toString());
-		response = request.post(ENDPOINT_URL);
-		System.out.println("response: " + response.getStatusCode());
+		response = request.request(Method.POST, ENDPOINT_URL+"?APPID=94ee89226ce499d45a755090f02e3e7b");
+		JsonParser parser = new JsonParser(); 
+		JsonObject jsonObject = parser.parse(response.body().asString()).getAsJsonObject();
+		System.out.println(jsonObject.toString());
+		id1 = jsonObject.get("ID").toString();
+		
+		request.body(requestParams1.toString());
+		response = request.request(Method.POST, ENDPOINT_URL+"?APPID=94ee89226ce499d45a755090f02e3e7b");
+		JsonObject jsonObject1 = parser.parse(response.body().asString()).getAsJsonObject();
+		System.out.println(jsonObject1.get("ID").toString());
+		id2 = jsonObject1.get("ID").toString();
+		System.out.println("response: " + response.body().asString());
 	}
 	
 	@When("^I get the stations with ids$")
 	public void i_get_the_stations_with_ids() throws Throwable {
-		JSONObject requestParams = new JSONObject();		
-		request = RestAssured.given();
-		requestParams.put("appid", "94ee89226ce499d45a755090f02e3e7b");
+		request = RestAssured.given().queryParam("APPID", "94ee89226ce499d45a755090f02e3e7b");
 		request.header("Content-Type", "application/json");
-		request.body(requestParams.toString());
-		response = request.get(ENDPOINT_URL);	
-		JsonPath jsonPathValidator = response.jsonPath();
-		allStationIDs = jsonPathValidator.getList("id"); 
-
-		System.out.println("\n Here is the ids of all the stations :\n"); 
-
-		for (String i: allStationIDs) 
-		  { 
-		     System.out.println(i); 
-		  }
+		response = request.request(Method.GET, ENDPOINT_URL+"/"+ id1);	
+		JsonParser parser = new JsonParser(); 
+		JsonObject jsonObject = parser.parse(response.body().asString()).getAsJsonObject();
+		Assert.assertEquals(jsonObject.get("external_id"), "DEMO_TEST001");
+		
+			
+		request = RestAssured.given().queryParam("APPID", "94ee89226ce499d45a755090f02e3e7b");
+		request.header("Content-Type", "application/json");
+		response = request.request(Method.GET, ENDPOINT_URL+"/"+ id2);	
+		JsonParser parser1 = new JsonParser(); 
+		JsonObject jsonObject1 = parser1.parse(response.body().asString()).getAsJsonObject();
+		Assert.assertEquals(jsonObject1.get("external_id"), "Interview1");
 		
 	}
 
