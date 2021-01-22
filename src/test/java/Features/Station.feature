@@ -13,11 +13,11 @@ Feature: Create Station
 		Then I should get Http Response code as 201
 		When I get the stations with ids
 		Then I should get the valid details
-#		When I delete both the stations 
-#		Then I should get Http Response code as 204
-#		When I delete the station again
-#		Then I should get Http Response code as 404
-#		And I should get response message as "Station not found"
-#		
+		When I delete both the stations 
+		Then I should get Http Response code as 204
+		When I delete the station again
+		Then I should get Http Response code as 404
+		And I should get response message as "Station not found"
+		
   
   	
