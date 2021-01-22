@@ -16,12 +16,14 @@
 
   <dependencies>
     
-    <dependency>
-		<groupId>io.rest-assured</groupId>
-		<artifactId>rest-assured-all</artifactId>
-		<version>4.2.0</version>
-		<scope>test</scope>
+    <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+	<dependency>
+	    <groupId>io.rest-assured</groupId>
+	    <artifactId>rest-assured</artifactId>
+	    <version>4.3.3</version>
+	    <scope>test</scope>
 	</dependency>
+
 	<dependency>
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-jvm</artifactId>
@@ -34,12 +36,12 @@
             <artifactId>cucumber-java</artifactId>
             <version>1.2.2</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		 https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
 		    <groupId>org.json</groupId>
 		    <artifactId>json</artifactId>
@@ -68,7 +70,7 @@
 <dependency>
     <groupId>io.rest-assured</groupId>
     <artifactId>json-path</artifactId>
-    <version>3.0.0</version>
+    <version>4.2.0</version>
 </dependency>
         
   </dependencies>
